@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-es=Elasticsearch([{'host':'13.68.236.211','port':9200}])
+es=Elasticsearch('localhost:9200')
 from fastapi import FastAPI
 app = FastAPI()
 @app.get("/typesense/{item}")
@@ -11,7 +11,7 @@ async def read_item(item: str):
 
 @app.get("/elasticsearch/{item}")
 async def read_item(item: str):
-    res = es.search(index='store', body={
+    res = es.search(index='semantic', body={
         "query": {
             "match": {
                 "text": {
@@ -20,6 +20,12 @@ async def read_item(item: str):
             }
         }
     })
+    response={}
     print(res['hits']['hits'])
-    return res['hits']['hits']
+    listRes=res['hits']['hits']
+    for item in listRes:
+        print(item['_source'])
+        response[item["_source"]['file_name']]=item["_source"]['doc_id']
+
+    return response
 
