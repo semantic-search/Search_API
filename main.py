@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 from fastapi.middleware.cors import CORSMiddleware
-es=Elasticsearch('localhost:9200')
+es=Elasticsearch('13.68.241.106:9200')
 from fastapi import FastAPI
 app = FastAPI()
 
